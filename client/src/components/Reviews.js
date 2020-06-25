@@ -16,19 +16,39 @@ const Reviews = ({ bookId }) => {
 
   const renderReviews = () => {
     return reviews.map(review => (
-      <Review key={review.id} review={review}/>
+      <Review key={review.id} review={review} editReview={editReview} deleteReview={deleteReview} bookId={bookId}/>
     ))
   };
 
   const addReview = (review) => setReviews([review, ...reviews])
 
+  const editReview = (bookId, review) => {
+    axios.put(`/api/books/${bookId}/reviews/${review.id}`, review)
+      .then( res => {
+        const updateReview = reviews.map(r => {
+          if (r.id === review.id)
+            return res.data;
+          return r;  
+        });
+        setReviews(updateReview)
+      })
+  };
+
+  const deleteReview = (bookId, id) => {
+    axios.delete(`/api/books/${bookId}/reviews/${id}`)
+      .then( res => {
+        setReviews(reviews.filter(r => r.id !== id))
+      })
+  };
+
   return (
     <>
       <h2>Book Reviews</h2>
       <br />
-      <ReviewForm addReview={addReview} bookId={bookId}/>
-      <br />
       {renderReviews()}
+      <br />
+      <ReviewForm addReview={addReview} bookId={bookId}/>
+      
     </>
   )
 }

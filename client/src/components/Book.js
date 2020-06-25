@@ -15,13 +15,17 @@ const Book = (props) => {
           bg="light"
           border="dark"
           style={{
-            width: "18rem"
+            width: "18rem",
+            padding: "10px"
           }}>
-          <Card.Body>
+            {editing ? <BookForm toggleEdit={setEditing} editBook={props.editBook} {...props} /> : 
+            <Card.Body>
             <Card.Header>Title: {props.title}</Card.Header>
             <Card.Body>Author: {props.author}</Card.Body>
             <Card.Body>{props.summary}</Card.Body>
-          </Card.Body>
+          </Card.Body> 
+          }
+          
           <Card.Footer>
             <Button
               size="sm"
@@ -41,11 +45,10 @@ const Book = (props) => {
               size="sm"
               variant="outline-success"
               as={Link}
-              to={{pathname: `/api/books/${props.id}`, book: book}}
+              to={{pathname: `/api/books/${props.id}`}}
             >
                 View Book
             </Button>
-            {editing && <BookForm toggleEdit={setEditing} editBook={props.editBook} {...props} />}
             {/* { editing ? <BookForm /> : null } */}
           </Card.Footer>
         </Card>
